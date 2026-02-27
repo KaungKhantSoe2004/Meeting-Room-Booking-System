@@ -1,9 +1,11 @@
 {
+  "type": "module",
   "name": "backend",
   "version": "1.0.0",
   "description": "Database Creation\r Mysql\r    CREATE TABLE users (\r     id INT AUTO_INCREMENT PRIMARY KEY,\r     name VARCHAR(255) NOT NULL,\r     role ENUM('admin', 'owner', 'user') NOT NULL\r );",
   "main": "index.js",
   "scripts": {
+    "dev": "tsx src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -23,6 +25,7 @@
     "@types/node": "^25.3.2",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }
