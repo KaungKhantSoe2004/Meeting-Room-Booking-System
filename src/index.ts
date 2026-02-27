@@ -1,18 +1,20 @@
-import express from "express"
-import cors from "cors"
-import dotenv from "dotenv"
-dotenv.config()
+import express, { Application, Request, Response } from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import bodyParser from "body-parser";
 
-const app = express();
-const PORT = process.env.PORT;
+dotenv.config();
 
+const app: Application = express();
+const PORT = process.env.PORT || 5000;
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", (_req, res) => {
-  res.json({ message: "Meeting Room Booking API running" })
-})
+app.get("/", (_req: Request, res: Response) => {
+  res.json({ message: "Meeting Room Booking API running" });
+});
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+  console.log(`Server running on port ${PORT}`);
+});
