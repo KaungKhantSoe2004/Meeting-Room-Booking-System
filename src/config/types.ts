@@ -1,9 +1,14 @@
+import { Request } from "express";
+
 export type UserRole = 'admin' | 'owner' | 'user';
 
 export interface User {
   id: number;
   name: string;
   role: UserRole;
+}
+export interface UserDataRequest extends Request {
+  user?: User;
 }
 export interface Booking {
   id: number;

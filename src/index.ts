@@ -1,34 +1,42 @@
+
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
-import pool from "./routes/controllers/config/db";
+import pool from "./config/db";
+import UserRouter from "./routes/userRoutes";
+import AdminRouter from "./routes/adminRoutes";
+import OwnerRouter from "./routes/ownerRoutes";
+import NormalRouter from "./routes/normalRoutes";
+
 
 dotenv.config();
 
 const app: Application = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
+
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", (_req: Request, res: Response) => {
-  res.json({ message: "Meeting Room Booking API running" });
-});
+app.use("/api/public", NormalRouter);
+app.use("/api/user", UserRouter);
+app.use("/api/owner", OwnerRouter);
+app.use("/api/admin", AdminRouter);
 
+app.get("/", (req: Request, res: Response) => {
+  res.json({ message: "Api is running " });
+});
 
 (async () => {
   try {
     await pool.getConnection();
-    console.log("MySQL Connected ✔");
-
+    console.log("MySQL connected");
     app.listen(PORT, () => {
-      console.log("Server running on PORT:", PORT);
+      console.log(`Server running on port ${PORT}`);
     });
   } catch (err) {
-    console.log(`Error Occured ${err}`);
+    console.error(`Failed to connect to MySQL: ${err}`);
+    process.exit(1);
   }
 })();
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
