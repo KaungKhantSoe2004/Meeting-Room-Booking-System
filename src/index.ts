@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
+import pool from "./routes/controllers/config/db";
 
 dotenv.config();
 
@@ -15,6 +16,19 @@ app.get("/", (_req: Request, res: Response) => {
   res.json({ message: "Meeting Room Booking API running" });
 });
 
+
+(async () => {
+  try {
+    await pool.getConnection();
+    console.log("MySQL Connected ✔");
+
+    app.listen(PORT, () => {
+      console.log("Server running on PORT:", PORT);
+    });
+  } catch (err) {
+    console.log(`Error Occured ${err}`);
+  }
+})();
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
