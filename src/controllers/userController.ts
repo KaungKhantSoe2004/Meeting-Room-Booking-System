@@ -72,7 +72,6 @@ export const deleteUser = async (
   req: Request<{ id: string }>,
   res: Response
 ): Promise<void> => {
-  try {
 
     if (!req.user || req.user.role !== "admin") {
       res.status(403).json({ error: "Only admins can delete users" });
@@ -80,16 +79,13 @@ export const deleteUser = async (
     }
 
     const userId = Number(req.params.id);
-
     if (isNaN(userId)) {
       res.status(400).json({ error: "Invalid user id" });
       return;
     }
 
     if (req.user.id === userId) {
-      res.status(400).json({
-        error: "Admins cannot delete their own account",
-      });
+      res.status(400).json({ error: "Admins cannot delete their own account" });
       return;
     }
 
@@ -97,23 +93,18 @@ export const deleteUser = async (
       "SELECT id FROM users WHERE id = ?",
       [userId]
     );
-
     if (rows.length === 0) {
       res.status(404).json({ error: "User not found" });
       return;
     }
 
+    await pool.query("DELETE FROM bookings WHERE user_id = ?", [userId]);
     await pool.query("DELETE FROM users WHERE id = ?", [userId]);
 
-    res.json({
-      message:
-        "User deleted. All their bookings have been removed (CASCADE).",
-    });
-  } catch (error) {
-    console.error("Delete user error:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
+    res.json({ message: "User and all their bookings have been deleted." });
+ 
 };
+
 
 export const changeUserRole = async (
   req: Request<{ id: string }, any, { role: string }>,

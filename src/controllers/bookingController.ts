@@ -13,23 +13,19 @@ declare global {
 }
 export const checkOverlap = async (
   startTime: Date,
-  endTime: Date,
-  excludeBookingId?: number
+  endTime: Date
 ): Promise<boolean> => {
-  const query = excludeBookingId
-    ? `SELECT id FROM bookings
-       WHERE id != ?
-         AND start_time < ? AND end_time > ?`
-    : `SELECT id FROM bookings
-       WHERE start_time < ? AND end_time > ?`;
+  const query = `
+    SELECT id FROM bookings
+    WHERE start_time < ? AND end_time > ?
+  `;
 
-  const params = excludeBookingId
-    ? [excludeBookingId, endTime, startTime]
-    : [endTime, startTime];
+  const params = [endTime, startTime];
 
   const [rows] = await pool.query<RowDataPacket[]>(query, params);
   return rows.length > 0;
 };
+
 export const createBooking = async (req: UserDataRequest, res: Response): Promise<void> => {
   const { startTime, endTime } = req.body;
 
