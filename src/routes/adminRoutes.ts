@@ -6,7 +6,7 @@ import {
   changeUserRole,
   getAllUsers,
 } from "../controllers/userController";
-import { deleteBooking, getAllBookings, getBookingsByUser } from "../controllers/bookingController";
+import { deleteBooking, getAllBookings, getBookingsByUser, getUsageSummary } from "../controllers/bookingController";
 
 const AdminRouter = Router();
 
@@ -19,5 +19,6 @@ AdminRouter.patch("/users/:id/role", changeUserRole);
 AdminRouter.get("/bookings", getAllBookings);
 AdminRouter.delete('/deleteBookings/:id', deleteBooking);
 AdminRouter.get("/bookingsByUser/:id", getBookingsByUser);
+AdminRouter.get("/usageSummary", getUsageSummary);
 export default AdminRouter;
 
